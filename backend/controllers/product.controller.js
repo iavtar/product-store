@@ -7,7 +7,7 @@ export const getProducts = async (req, res) => {
     if (products.length === 0) {
       return res.status(404).json({ message: "No products found" });
     }
-    res.status(200).json({success: true, data: products });
+    res.status(200).json({ success: true, data: products });
   } catch (error) {
     console.error("Error fetching products:", error);
     res.status(500).json({ message: "Server Error" });
@@ -32,21 +32,23 @@ export const createProduct = async (req, res) => {
 };
 
 export const updateProduct = async (req, res) => {
-    const { id } = req.params;
-    const product = req.body;
-    try {
-        if(!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ message: "Invalid product ID" });
-        }
-        const updatedProduct = await Product.findByIdAndUpdate(id, product, { new: true });
-        if (!updatedProduct) {
-            return res.status(404).json({ message: "Product not found" });
-        }
-        res.status(200).json({ success: true, product: updatedProduct });
-    } catch (error) {
-        console.error("Error updating product:", error);
-        res.status(500).json({ message: "Server Error" });
+  const { id } = req.params;
+  const product = req.body;
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid product ID" });
     }
+    const updatedProduct = await Product.findByIdAndUpdate(id, product, {
+      new: true,
+    });
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.status(200).json({ success: true, product: updatedProduct });
+  } catch (error) {
+    console.error("Error updating product:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
 };
 
 export const deleteProduct = async (req, res) => {
